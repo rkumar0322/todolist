@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -22,8 +21,6 @@ var (
 
 func main() {
 	setAuth0Variables()
-	fmt.Println(audience)
-	fmt.Println(domain)
 	r := gin.Default()
 
 	// This will ensure that the angular files are served correctly
@@ -56,7 +53,7 @@ func setAuth0Variables() {
 }
 
 // ValidateRequest will verify that a token received from an http request
-// is valid and signyed by Auth0
+// is valid and signy by authority
 func authRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
@@ -64,7 +61,7 @@ func authRequired() gin.HandlerFunc {
 		client := auth0.NewJWKClient(auth0.JWKClientOptions{URI: auth0Domain + ".well-known/jwks.json"}, nil)
 		configuration := auth0.NewConfiguration(client, []string{audience}, auth0Domain, jose.RS256)
 		validator := auth0.NewValidator(configuration, nil)
-		fmt.Println(c.Request.Header)
+
 		_, err := validator.ValidateRequest(c.Request)
 
 		if err != nil {
@@ -80,3 +77,4 @@ func terminateWithError(statusCode int, message string, c *gin.Context) {
 	c.JSON(statusCode, gin.H{"error": message})
 	c.Abort()
 }
+
