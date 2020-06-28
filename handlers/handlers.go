@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/rkumar0322/todolist/todo"
+	"todolist/todo"
 	"github.com/gin-gonic/gin"
 )
 
