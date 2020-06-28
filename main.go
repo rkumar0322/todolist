@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -11,7 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 	jose "gopkg.in/square/go-jose.v2"
 
-	"todolist/handlers"
+	"github.com/rkumar0322/todolist/handlers"
 )
 
 var (
@@ -21,6 +22,8 @@ var (
 
 func main() {
 	setAuth0Variables()
+	fmt.Println(audience)
+	fmt.Println(domain)
 	r := gin.Default()
 
 	// This will ensure that the angular files are served correctly
@@ -61,7 +64,7 @@ func authRequired() gin.HandlerFunc {
 		client := auth0.NewJWKClient(auth0.JWKClientOptions{URI: auth0Domain + ".well-known/jwks.json"}, nil)
 		configuration := auth0.NewConfiguration(client, []string{audience}, auth0Domain, jose.RS256)
 		validator := auth0.NewValidator(configuration, nil)
-
+		fmt.Println(c.Request.Header)
 		_, err := validator.ValidateRequest(c.Request)
 
 		if err != nil {
